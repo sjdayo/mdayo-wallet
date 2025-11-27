@@ -99,7 +99,7 @@ class WalletBalance extends Model
     {
         return $this->hasMany(WalletLedger::class,'wallet_balance_id');    
     }
-    private function createLedger(string $type,Model $ledgerable, float $amount, $balance_before,$balance_after,array $meta = [])
+    protected function createLedger(string $type,Model $ledgerable, float $amount, $balance_before,$balance_after,array $meta = [])
     {
         
         return $this->ledger()->create([
