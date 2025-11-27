@@ -10,6 +10,7 @@ class WalletResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'digital_address' => $this->digital_address,
             'owner_type' => $this->owner_type,
             'owner_id' => $this->owner_id,
             'balances' => WalletBalanceResource::collection($this->whenLoaded('balances')),
