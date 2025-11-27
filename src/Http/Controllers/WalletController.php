@@ -19,10 +19,6 @@ use Mdayo\Wallet\Models\Wallet;
  *     name="Wallet",
  *     description="Operations for wallet balances and ledgers"
  * )
- */
-
-
-/**
  * @OA\Schema(
  *     schema="Wallet",
  *     type="object",
@@ -41,10 +37,7 @@ use Mdayo\Wallet\Models\Wallet;
  *     @OA\Property(property="created_at", type="string", format="date-time", example="2025-11-27T10:00:00Z"),
  *     @OA\Property(property="updated_at", type="string", format="date-time", example="2025-11-27T10:00:00Z")
  * )
- */
-
-
-/**
+ * 
  * @OA\Schema(
  *     schema="WalletBalance",
  *     type="object",
@@ -58,9 +51,7 @@ use Mdayo\Wallet\Models\Wallet;
  *     @OA\Property(property="created_at", type="string", format="date-time", example="2025-11-27T10:00:00Z"),
  *     @OA\Property(property="updated_at", type="string", format="date-time", example="2025-11-27T10:00:00Z")
  * )
- */
-
-/**
+ * 
  * @OA\Schema(
  *     schema="Ledger",
  *     type="object",
@@ -133,8 +124,7 @@ class WalletController extends Controller
      *             )
      *         )
      *     ),
-     *     @OA\Response(response=401, description="Unauthorized"),
-     *     @QA l5-swagger
+     *     @OA\Response(response=401, description="Unauthorized")
      * )
      */
     public function index(Request $request)
@@ -182,8 +172,7 @@ class WalletController extends Controller
      *             @OA\Property(property="data", ref="#/components/schemas/Wallet")
      *         )
      *     ),
-     *     @OA\Response(response=404, description="Wallet not found"),
-     *     @QA l5-swagger
+     *     @OA\Response(response=404, description="Wallet not found")
      * )
      */
     public function show(Wallet $wallet)
@@ -227,8 +216,7 @@ class WalletController extends Controller
      *             @OA\Property(property="data", ref="#/components/schemas/WalletBalance")
      *         )
      *     ),
-     *     @OA\Response(response=404, description="Wallet or balance not found"),
-     *     @QA l5-swagger
+     *     @OA\Response(response=404, description="Wallet or balance not found")
      * )
      */
     public function balance(Wallet $wallet, $currency)
@@ -291,8 +279,7 @@ class WalletController extends Controller
      *             )
      *         )
      *     ),
-     *     @OA\Response(response=404, description="Wallet or ledger not found"),
-     *     @QA l5-swagger
+     *     @OA\Response(response=404, description="Wallet or ledger not found")
      * )
      */
     public function ledger(Request $request, Wallet $wallet, $currency)
