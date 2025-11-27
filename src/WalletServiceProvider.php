@@ -23,7 +23,7 @@ class WalletServiceProvider extends ServiceProvider
     public function boot()
     {
         // Load package routes
-        $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/wallet.php');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         // Publish config
