@@ -12,7 +12,7 @@ use Mdayo\Wallet\Models\Wallet;
 use Illuminate\Database\Eloquent\Model;
 use Throwable;
 
-class CreditWallet implements ShouldQueue
+class DebitFrozenWalletWallet implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -65,7 +65,7 @@ class CreditWallet implements ShouldQueue
             $wallet_balance->lockForUpdate();
 
             // Perform the debit
-            $wallet_balance->credit(
+            $wallet_balance->debitFrozen(
                 $this->amount,
                 $this->ledgerable,
                 $this->meta
