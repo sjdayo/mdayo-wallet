@@ -12,7 +12,7 @@ use Mdayo\Wallet\Models\Wallet;
 use Illuminate\Database\Eloquent\Model;
 use Throwable;
 
-class DebitFrozenWalletWallet implements ShouldQueue
+class DebitFrozenWallet implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
