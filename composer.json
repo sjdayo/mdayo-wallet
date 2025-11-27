@@ -24,7 +24,7 @@
         "laravel": {
             "providers": [
                 "Mdayo\\Wallet\\WalletServiceProvider",
-                "Mdayo\\Wallet\\WalletRouteProvider",
+                "Mdayo\\Wallet\\WalletRouteServiceProvider",
 
                 
             ]
