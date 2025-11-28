@@ -36,9 +36,20 @@ class WalletRouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes(): void
     {
-        Route::prefix('api')
-            ->middleware('api') // or 'auth:sanctum' if you want
-            ->namespace($this->namespace)
-            ->group(__DIR__.'/../routes/wallet.php'); // path to your package api routes
+        $path = base_path('routes/wallet.php');
+
+        if (file_exists($path)) {
+            // Use published routes if they exist
+            Route::prefix('api')
+                ->middleware('api')
+                ->namespace($this->namespace)
+                ->group($path);
+        } else {
+            // Otherwise, use package default
+            Route::prefix('api')
+                ->middleware('api')
+                ->namespace($this->namespace)
+                ->group(__DIR__.'/../routes/wallet.php');
+        }
     }
 }

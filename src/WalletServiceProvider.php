@@ -24,6 +24,10 @@ class WalletServiceProvider extends ServiceProvider
     {
         // Load package routes
         $this->loadRoutesFrom(__DIR__.'/../routes/wallet.php');
+            // Optional: allow publishing routes for customization
+        $this->publishes([
+            __DIR__ . '/../routes/wallet.php' => base_path('routes/wallet.php')
+        ], 'wallet-routes');
         
         $this->publishes([
             __DIR__.'/../database/migrations/' => database_path('migrations')
@@ -33,6 +37,7 @@ class WalletServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/wallet.php' => config_path('wallet.php'),
         ], 'wallet-config');
+        
          // Optional: publish queue config if you want
         $this->publishes([
             __DIR__.'/../config/queue.php' => config_path('queue.php'),
