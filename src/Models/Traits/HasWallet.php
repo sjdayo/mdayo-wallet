@@ -1,5 +1,5 @@
 <?php
-namespace Mdayo\Wallet\Traits;
+namespace Mdayo\Wallet\Models\Traits;
 use Mdayo\Wallet\Models\Wallet;
 
 trait HasWallet
