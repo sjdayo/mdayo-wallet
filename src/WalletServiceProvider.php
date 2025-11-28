@@ -24,7 +24,10 @@ class WalletServiceProvider extends ServiceProvider
     {
         // Load package routes
         $this->loadRoutesFrom(__DIR__.'/../routes/wallet.php');
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        
+        $this->publishes([
+            __DIR__.'/../database/migrations/' => database_path('migrations')
+        ], 'wallet-migrations');
 
         // Publish config
         $this->publishes([
