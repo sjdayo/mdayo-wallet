@@ -223,7 +223,7 @@ class WalletController extends Controller
      *         description="Ledger type (credit or debit)",
      *         @OA\Schema(
      *             type="string",
-     *             enum={"credit", "debit"},  // enum definition
+     *             enum={"credit", "debit"}, 
      *             example="credit"
      *         )
      *     ),
