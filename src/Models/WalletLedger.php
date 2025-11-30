@@ -11,6 +11,11 @@ class WalletLedger extends Model
     {
         return $this->belongsTo(WalletBalance::class);
     }
+   
+    public function currency()
+    {
+        return $this->morphTo();
+    }
     
     public function ledgerable()
     {

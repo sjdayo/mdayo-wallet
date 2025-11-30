@@ -149,17 +149,24 @@ class WalletController extends Controller
      * Show a specific wallet
      *
      * @OA\Get(
-     *     path="/wallets/{wallet}",
+     *     path="/wallets/{digital_address}",
      *     tags={"Wallet"},
      *     summary="Show a wallet with balances",
      *     description="Fetch a specific wallet by ID along with its balances.",
      *     security={{"sanctum":{}}},
      *     @OA\Parameter(
-     *         name="wallet",
+     *         name="digital_address",
      *         in="path",
      *         required=true,
-     *         description="ID of the wallet",
-     *         @OA\Schema(type="integer", example=1)
+     *         description="Wallet digital address",
+     *         @OA\Schema(type="string", example="D5XWTY9HEY")
+     *     ),
+     *     @OA\Parameter(
+     *         name="currency",
+     *         in="query",
+     *         required=false,
+     *         description="Currency code",
+     *         @OA\Schema(type="string", example="USD")
      *     ),
      *     @OA\Response(
      *         response=200,
@@ -175,76 +182,54 @@ class WalletController extends Controller
      *     @OA\Response(response=404, description="Wallet not found")
      * )
      */
-    public function show(Wallet $wallet)
+    
+    public function show(Request $request,string $digital_address)
     {
-        $wallet->load('balances');
+
+        $wallet = $request->user()->wallet->where('digital_address',$digital_address)->firstOrFail();
+        $currency = $request->currency??null; 
+        $wallet->load([
+            'balances' => function ($q) use ($currency) {
+                $q->when($currency, fn($q) =>
+                    $q->where('symbol', $currency)
+                );
+            }
+        ]);
+
         $data = new WalletResource($wallet);
         return $this->successResponse('Wallet fetched successfully.', $data);
-    }
-
-    /**
-     * Get balance of a wallet by currency
-     *
-     * @OA\Get(
-     *     path="/wallets/{wallet}/balance/{currency}",
-     *     tags={"Wallet"},
-     *     summary="Get wallet balance by currency",
-     *     description="Fetch the balance of a specific wallet filtered by currency.",
-     *     security={{"sanctum":{}}},
-     *     @OA\Parameter(
-     *         name="wallet",
-     *         in="path",
-     *         required=true,
-     *         description="Wallet ID",
-     *         @OA\Schema(type="integer", example=1)
-     *     ),
-     *     @OA\Parameter(
-     *         name="currency",
-     *         in="path",
-     *         required=true,
-     *         description="Currency code",
-     *         @OA\Schema(type="string", example="USD")
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Wallet balance fetched successfully",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=0),
-     *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="error", type="string", nullable=true, example=null),
-     *             @OA\Property(property="message", type="string", example="Wallet balance fetched successfully."),
-     *             @OA\Property(property="data", ref="#/components/schemas/WalletBalance")
-     *         )
-     *     ),
-     *     @OA\Response(response=404, description="Wallet or balance not found")
-     * )
-     */
-    public function balance(Wallet $wallet, $currency)
-    {
-        $balance = $wallet->balances()->where('currency', $currency)->firstOrFail();
-        $data = new WalletBalanceResource($balance);
-        return $this->successResponse('Wallet balance fetched successfully.', $data);
     }
 
     /**
      * Get ledger of a wallet by currency
      *
      * @OA\Get(
-     *     path="/wallets/{wallet}/ledger/{currency}",
+     *     path="/wallets/{digital_address}/ledger",
      *     tags={"Wallet"},
      *     summary="Get wallet ledger by currency",
      *     description="Fetch paginated ledger entries for a wallet filtered by currency.",
      *     security={{"sanctum":{}}},
      *     @OA\Parameter(
-     *         name="wallet",
+     *         name="digital_address",
      *         in="path",
      *         required=true,
-     *         description="Wallet ID",
-     *         @OA\Schema(type="integer", example=1)
+     *         description="Wallet digital address",
+     *         @OA\Schema(type="string", example="D5XWTY9HEY")
+     *     ),
+     *     @OA\Parameter(
+     *         name="type",
+     *         in="query",
+     *         required=false,
+     *         description="Ledger type (credit or debit)",
+     *         @OA\Schema(
+     *             type="string",
+     *             enum={"credit", "debit"},  // enum definition
+     *             example="credit"
+     *         )
      *     ),
      *     @OA\Parameter(
      *         name="currency",
-     *         in="path",
+     *         in="query",
      *         required=true,
      *         description="Currency code",
      *         @OA\Schema(type="string", example="USD")
@@ -282,15 +267,20 @@ class WalletController extends Controller
      *     @OA\Response(response=404, description="Wallet or ledger not found")
      * )
      */
-    public function ledger(Request $request, Wallet $wallet, $currency)
+    public function ledger(Request $request, atring $digital_address)
     {
         $validated = $request->validate([
-            'items_per_page' => 'sometimes|integer'
+            'items_per_page' => 'sometimes|integer',
+            'currency' => 'required|string',
+            'type' => 'sometimes|string'
         ]);
         $itemsPerPage = $validated['items_per_page'] ?? 15;
-
-        $balance = $wallet->balances()->where('currency', $currency)->firstOrFail();
-        $ledger = $balance->ledger()->with('ledgerable')->paginate($itemsPerPage);
+        $currency = $validated['currency'];
+        $type = $request->type??null;
+        $wallet = $request->user()->wallet->where('digital_address',$digital_address)->firstOrfail();
+        $balance = $wallet->balances()->whereHas('currency',fn($q)=>$q->where('symbol', $currency))->firstOrFail();
+        $ledger = $balance->ledger()->when($type,fn($q)=>$q->where('type',$type))->with('ledgerable')->paginate($itemsPerPage);
+       
         $data = LedgerResource::collection($ledger);
         $meta = [
             'current_page' => $ledger->currentPage(),

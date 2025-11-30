@@ -30,14 +30,14 @@ class DebitFrozenWallet implements ShouldQueue
      * Create a new job instance.
      *
      * @param Wallet $wallet
-     * @param string $currency
+     * @param Model|null $currency
      * @param float $amount
      * @param Model|null $ledgerable
      * @param array $meta
      */
     public function __construct(
         protected Wallet $wallet,
-        protected string $currency,
+        protected ?Model $currency = null,
         protected float $amount,
         protected ?Model $ledgerable = null,
         protected array $meta = []
@@ -55,7 +55,7 @@ class DebitFrozenWallet implements ShouldQueue
     {
         // Ensure the wallet balance exists
         $wallet_balance = $this->wallet->balances()->firstOrCreate(
-            ['currency' => $this->currency],
+            ['currency_id' => $this->currency->id,'currency_type'=>get_class($this->currency)],
             ['balance' => 0]
         );
 

@@ -20,7 +20,7 @@ return new class extends Migration
         Schema::create('wallet_balances', function (Blueprint $table) {
             $table->id();
             $table->foreignId('wallet_id')->constrained()->onDelete('cascade');
-            $table->string('currency');
+            $table->morphs('currency');
             $table->decimal('balance', 24, 6)->default(0);
             $table->decimal('frozen', 24, 6)->default(0); // for holds/reserved funds
             $table->timestamps();
@@ -34,6 +34,7 @@ return new class extends Migration
             $table->nullableMorphs('ledgerable'); // ledgerable_id + ledgerable_type
             $table->foreignId('wallet_balance_id')->constrained('wallet_balances')->cascadeOnDelete();
             $table->string('type')->nullable();
+            $table->morphs('currency');
             $table->bigInteger('amount');
             $table->bigInteger('balance_before');
             $table->bigInteger('balance_after');            

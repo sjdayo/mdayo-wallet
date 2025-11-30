@@ -90,6 +90,10 @@ class WalletBalance extends Model
         $this->createLedger('debit',$ledgerable,$amount,$balance_before,$balance_after,$meta);
         return $this->refresh();
     }
+    public function currency()
+    {
+        return $this->morphTo();
+    }
     
     public function wallet()
     {
