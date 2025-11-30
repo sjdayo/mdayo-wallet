@@ -109,6 +109,8 @@ class WalletBalance extends Model
         return $this->ledger()->create([
             'type' => $type,
             'amount' => $amount,
+            'currency_id'=>$this->currency_id,
+            'currency_type'=>$this->currency_type,
             'balance_before' => $balance_before,
             'balance_after' => $balance_after,
             'ledgerable_id' => $ledgerable->id,

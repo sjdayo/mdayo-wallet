@@ -26,7 +26,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Ensure one token per wallet
-            $table->unique(['wallet_id', 'currency']);
+            $table->unique(['wallet_id', 'currency_id','currency_type']);
         });
          Schema::create('wallet_ledgers', function (Blueprint $table) {
             $table->id();
