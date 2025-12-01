@@ -191,7 +191,7 @@ class WalletController extends Controller
         $wallet->load([
             'balances' => function ($q) use ($currency) {
                 $q->when($currency, fn($q) =>
-                    $q->where('symbol', $currency)
+                    $q->whereHas('currency',fn($q)=>$q->where('symbol', $currency))
                 );
             }
         ]);
