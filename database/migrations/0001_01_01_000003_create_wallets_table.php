@@ -32,7 +32,7 @@ return new class extends Migration
             $table->id();
             // Polymorphic relation to any origin (Transaction, Order, Payment)
             $table->nullableMorphs('ledgerable'); // ledgerable_id + ledgerable_type
-            $table->foreignId('wallet_balance_id')->constrained('wallet_balances')->cascadeOnDelete();
+            $table->foreignId('wallet_id')->constrained('wallet')->cascadeOnDelete();
             $table->string('type')->nullable();
             $table->morphs('currency');
             $table->bigInteger('amount');
