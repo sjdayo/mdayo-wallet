@@ -4,6 +4,15 @@ use Mdayo\Wallet\Models\Wallet;
 
 trait HasWallet
 {
+    protected static function bootHasWallet()
+    {
+        static::saved(function ($owner) {
+            if (!$owner->wallet()->exists()) 
+            {
+                $owner->wallet()->create();
+            }
+        });
+    }
     public function wallet()
     {
         return $this->morphOne(Wallet::class,'owner');
