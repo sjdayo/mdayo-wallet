@@ -1,7 +1,7 @@
 <?php
 namespace Mdayo\Wallet\Models;
 use Illuminate\Database\Eloquent\Model;
-use Mdayo\User\Models\Traits\WalletAttributes;
+use Mdayo\Wallet\Models\Traits\WalletAttributes;
 
 class Wallet extends Model
 {
