@@ -1,5 +1,5 @@
 <?php
-namespace Mdayo\User\Models\Traits;
+namespace Mdayo\Wallet\Models\Traits;
 use Illuminate\Support\Str;
 use Mdayo\Wallet\Models\WalletBalance;
 
