@@ -28,19 +28,7 @@ return new class extends Migration
             // Ensure one token per wallet
             $table->unique(['wallet_id', 'currency_id','currency_type']);
         });
-         Schema::create('wallet_ledgers', function (Blueprint $table) {
-            $table->id();
-            // Polymorphic relation to any origin (Transaction, Order, Payment)
-            $table->nullableMorphs('ledgerable'); // ledgerable_id + ledgerable_type
-            $table->foreignId('wallet_id')->constrained('wallet')->cascadeOnDelete();
-            $table->string('type')->nullable();
-            $table->morphs('currency');
-            $table->bigInteger('amount');
-            $table->bigInteger('balance_before');
-            $table->bigInteger('balance_after');            
-            $table->json('meta')->nullable();
-            $table->timestamps();
-        });
+        
     }
 
     /**
@@ -50,7 +38,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('wallets');
         Schema::dropIfExists('wallet_balances');
-        Schema::dropIfExists('wallet_ledgers');
 
     }
 };
