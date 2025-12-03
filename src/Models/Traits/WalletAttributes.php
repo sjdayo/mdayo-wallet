@@ -7,8 +7,6 @@ trait WalletAttributes {
     
     protected static function bootWalletAttributes()
     {
-        parent::boot();
-
         static::creating(function ($wallet) {
             if (empty($wallet->digital_address)) {
                 $wallet->digital_address = static::generateUniqueDigitalAddress();
